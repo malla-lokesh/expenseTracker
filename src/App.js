@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import AuthenticationForm from "./Components/AuthenticationForm";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom/cjs/react-router-dom";
-import Homepage from "./Components/Homepage";
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom/cjs/react-router-dom";
+import Homepage from "./Pages/Homepage";
+import AuthContext from "./Components/ContextStore/AuthContext";
+import UpdateProfilePage from "./Pages/UpdateProfilePage";
 
 function App() {
+  const authContext = useContext(AuthContext);
+
   return (
     <React.Fragment>
       <Router>
@@ -12,7 +16,10 @@ function App() {
             <AuthenticationForm/>
           </Route>
           <Route path='/homepage' exact>
-            <Homepage/>
+            {authContext.isLoggedIn ? <Homepage/> : <Redirect to='/'/>}
+          </Route>
+          <Route path='/updateProfilePage'>
+            {authContext.isLoggedIn ? <UpdateProfilePage/> : <Redirect to='/'/>}
           </Route>
         </Switch>
       </Router>

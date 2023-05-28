@@ -3,14 +3,20 @@ import React, { useState } from "react";
 const AuthContext = React.createContext({
     token: '',
     isLoggedIn: false,
-    setToken: (token, mail) => {}
+    displayName: '',
+    photoUrl: '',
+    setToken: (token, mail) => {},
+    setDisplayName: (displayName) => {},
+    setPhotoUrl: () => {}
 });
 
 export const AuthContextProvider = (props) => {
     const [token, setToken] = useState(localStorage.getItem('token'));
     const [email, setEmail] = useState(localStorage.getItem('email'));
+    const [displayName, setDisplayName] = useState('');
+    const [photoUrl, setPhotoUrl] = useState('');
 
-    const isLoggedIn = !!token;
+    const isLoggedIn = (token!=null) ? true : false;
 
     const setTokenHandler = (token, mail) => {
         let mailId = mail.replace(/[.@]/g, "");
@@ -24,7 +30,11 @@ export const AuthContextProvider = (props) => {
         token: token,
         email: email,
         isLoggedIn: isLoggedIn,
-        setToken: setTokenHandler
+        displayName: displayName,
+        photoUrl: photoUrl,
+        setToken: setTokenHandler,
+        setDisplayName: (name) => {setDisplayName(name)},
+        setPhotoUrl: (photo) => {setPhotoUrl(photo)}
     }
 
     return <AuthContext.Provider value={authContextValue}>
