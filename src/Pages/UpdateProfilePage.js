@@ -28,6 +28,7 @@ const UpdateProfilePage = () => {
             setDisplayName(user.displayName)
             setProfilePicture(user.photoUrl)
             setDetailsUpdatedMsg(true);
+            return null;
         })
     })
 
