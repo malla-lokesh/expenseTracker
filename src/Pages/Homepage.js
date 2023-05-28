@@ -7,8 +7,8 @@ const Homepage = () => {
     return <React.Fragment>
         <div>
             <div>Welcome to Expense Tracker!!!</div>
-            <div>Your profile is incomplete: 
-                <button type='button' onClick={() => history.push('/updateProfilePage')}>complete now</button>
+            <div>Want to update your profile?: 
+                <button type='button' onClick={() => history.push('/updateProfilePage')}>Click here</button>
             </div>
         </div>
         <hr/>

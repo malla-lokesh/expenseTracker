@@ -3,8 +3,33 @@ import AuthContext from "../Components/ContextStore/AuthContext";
 
 const UpdateProfilePage = () => {
     const [displayName, setDisplayName] = useState('');
-    const [profilePicture, setProfilePicture] = useState('https://drive.google.com/drive/u/0/folders/1KIV7bkNgKOYUI7Xvb4Sr7AL1_oWI_HiX');
+    const [profilePicture, setProfilePicture] = useState('');
+    const [detailsUpdatedMsg, setDetailsUpdatedMsg] = useState(false);
     const authContext = useContext(AuthContext);
+
+    fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDbZODcPqKDtyrTyZl4UpkMuFUsMsfH9Aw`, {
+        method: 'POST',
+            body: JSON.stringify({
+                idToken: authContext.token,
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+    }).then(res => {
+        if(res.ok) {
+            return res.json();
+        } else {
+            res.json().then(data => {
+                alert(data.error.message);
+            })
+        }
+    }).then(data => {
+        data.users.map(user => {
+            setDisplayName(user.displayName)
+            setProfilePicture(user.photoUrl)
+            setDetailsUpdatedMsg(true);
+        })
+    })
 
     const updateProfileSubmitHandler = (event) => {
         event.preventDefault();
@@ -41,6 +66,7 @@ const UpdateProfilePage = () => {
             <input type='url' value={profilePicture} onChange={(e) => setProfilePicture(e.target.value)} placeholder='place the URL for photo'/>
             <button type='submit'>Update</button>
         </form>
+        <h4>{detailsUpdatedMsg ? 'Profile is completed!' : ''}</h4>
     </React.Fragment>
 };
 
