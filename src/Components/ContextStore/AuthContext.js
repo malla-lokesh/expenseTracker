@@ -7,7 +7,8 @@ const AuthContext = React.createContext({
     photoUrl: '',
     setToken: (token, mail) => {},
     setDisplayName: (displayName) => {},
-    setPhotoUrl: () => {}
+    setPhotoUrl: () => {},
+    logout: () => {}
 });
 
 export const AuthContextProvider = (props) => {
@@ -26,6 +27,13 @@ export const AuthContextProvider = (props) => {
         localStorage.setItem('email', mailId);
     }
 
+    const logoutHandler = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('email');
+        setToken(null);
+        setEmail(null);
+    }
+
     const authContextValue = {
         token: token,
         email: email,
@@ -34,7 +42,8 @@ export const AuthContextProvider = (props) => {
         photoUrl: photoUrl,
         setToken: setTokenHandler,
         setDisplayName: (name) => {setDisplayName(name)},
-        setPhotoUrl: (photo) => {setPhotoUrl(photo)}
+        setPhotoUrl: (photo) => {setPhotoUrl(photo)},
+        logout: logoutHandler
     }
 
     return <AuthContext.Provider value={authContextValue}>

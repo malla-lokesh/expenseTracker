@@ -31,6 +31,7 @@ const Homepage = () => {
             <div>Want to update your profile?: 
                 <button type='button' onClick={() => history.push('/updateProfilePage')}>Click here</button>
             </div>
+            <button onClick={authContext.logout}>Logout</button>
         </div>
         <hr/>
         <div>
