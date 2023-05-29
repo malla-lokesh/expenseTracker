@@ -5,6 +5,7 @@ const AuthContext = React.createContext({
     isLoggedIn: false,
     displayName: '',
     photoUrl: '',
+    email: '',
     setToken: (token, mail) => {},
     setDisplayName: (displayName) => {},
     setPhotoUrl: () => {},

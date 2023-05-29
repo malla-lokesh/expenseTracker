@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-d
 import Homepage from "./Pages/Homepage";
 import AuthContext from "./Components/ContextStore/AuthContext";
 import UpdateProfilePage from "./Pages/UpdateProfilePage";
+import ForgotPassword from "./Pages/ForgotPassword";
 
 function App() {
   const authContext = useContext(AuthContext);
@@ -20,6 +21,9 @@ function App() {
           </Route>
           <Route path='/updateProfilePage'>
             {authContext.isLoggedIn ? <UpdateProfilePage/> : <Redirect to='/'/>}
+          </Route>
+          <Route path='/forgotpassword'>
+            <ForgotPassword/>
           </Route>
         </Switch>
       </Router>

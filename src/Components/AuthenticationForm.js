@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import './AuthenticationForm.css';
 import AuthContext from "./ContextStore/AuthContext";
-import { Redirect } from "react-router-dom/cjs/react-router-dom";
+import { Redirect, useHistory } from "react-router-dom/cjs/react-router-dom";
 
 const AuthenticationForm = () => {
     const [email, setEmail] = useState('');
@@ -10,6 +10,7 @@ const AuthenticationForm = () => {
     const [changeToLoginForm, setChangeToLoginForm] = useState(false);
     const [redirectToHomepage, setRedirectToHomepage] = useState(false);
     const authContext = useContext(AuthContext);
+    const history = useHistory();
 
     const changeFormHandler = () => {
         setChangeToLoginForm((prevState) => !prevState);
@@ -87,6 +88,7 @@ const AuthenticationForm = () => {
             <input className='emailInput' type='email' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='email' required/>
             <input className='passwordInput' type='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='password' required/>
             {!changeToLoginForm && <input className='confirmPasswordInput' type='password' value={confirmPassword} onChange={setConfirmPasswordHandler} placeholder='confirm password' required/>}
+            {changeToLoginForm && <button onClick={() => history.push('/forgotpassword')}>forgot password</button>}
             <button type='submit' className='authenticationFormSubmitButton'>
                 {changeToLoginForm ? 'Login' : 'Sign up'}
             </button>
