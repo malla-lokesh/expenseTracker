@@ -40,6 +40,12 @@ const Homepage = () => {
             </button>
              to verify your email
         </div>
+        <div>
+            <button type='button' onClick={() => history.push('/expenseForm')}>
+                Click here 
+            </button>
+            to explore your expenses
+        </div>
     </React.Fragment>
 };
 

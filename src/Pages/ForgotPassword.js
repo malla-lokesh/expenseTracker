@@ -33,7 +33,7 @@ const ForgotPassword = () => {
     return <React.Fragment>
         <div>Enter the email with which you have registered</div>
         <form onSubmit={passwordResetHandler}>
-            <input type='email' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Enter email address to get the password reset link'/>
+            <input type='email' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Enter email address to get the password reset link' required/>
             <button type='submit'>Send Link</button>
         </form>
         {isLoading ? 'Loading...' : null}
