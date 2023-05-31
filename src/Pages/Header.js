@@ -7,10 +7,12 @@ const Header = () => {
     const isLoggedIn = useSelector(state => state.authentication.isLoggedIn);
     const showThemeButtton = useSelector(state => state.theme.showThemeButton);
     const theme = useSelector(state => state.theme.changeTheme);
+    const premiumActivated = useSelector(state => state.expense.activatePremium);
     const dispatch = useDispatch();
 
     const logoutHandler = () => {
         dispatch(authActions.setIdToken(''));
+        dispatch(authActions.setEmail(''));
         dispatch(authActions.logout());
     }
 
@@ -20,7 +22,7 @@ const Header = () => {
             backgroundColor: theme === 'dark' ? 'black' : 'white'
         }}>Welcome to Expense Tracker!!!</h1>
         {isLoggedIn && <button onClick={logoutHandler}>Logout</button>}
-        {showThemeButtton && <button onClick={() => {dispatch(themeActions.changeTheme())}}>Change Theme</button>}
+        {isLoggedIn && premiumActivated && showThemeButtton && <button onClick={() => {dispatch(themeActions.changeTheme())}}>Change Theme</button>}
     </React.Fragment>
 }
 

@@ -17,6 +17,7 @@ const ExpenseForm = () => {
     const expensesFromCentralStore = useSelector(state => state.expense.expenses);
     const premium = useSelector(state => state.expense.activatePremium);
     const premiumActivated = useSelector(state => state.theme.showThemeButton);
+    const email = useSelector(state => state.authentication.email);
 
     useEffect(() => {
         fetchExpenses();
@@ -25,7 +26,7 @@ const ExpenseForm = () => {
     const fetchExpenses = async () => {
         setIsLoading(true);
         try {
-            const response = await axios.get('https://expensetrackerstorage-default-rtdb.firebaseio.com/expenses.json')
+            const response = await axios.get(`https://expensetrackerstorage-default-rtdb.firebaseio.com/${email}expenses.json`)
             if(response.data === null) {
                 setIsLoading(false);
                 return;
@@ -53,7 +54,7 @@ const ExpenseForm = () => {
 
         if(editMode) {
             try {
-                const response = await axios.put(`https://expensetrackerstorage-default-rtdb.firebaseio.com/expenses/${editExpenseId}.json`, expense);
+                const response = await axios.put(`https://expensetrackerstorage-default-rtdb.firebaseio.com/${email}expenses/${editExpenseId}.json`, expense);
                 if(response.statusText === 'OK') {
                     fetchExpenses();
                 } else {
@@ -65,7 +66,7 @@ const ExpenseForm = () => {
             setEditMode(false);
         } else {
             try {
-                const response = await axios.post('https://expensetrackerstorage-default-rtdb.firebaseio.com/expenses.json', expense)
+                const response = await axios.post(`https://expensetrackerstorage-default-rtdb.firebaseio.com/${email}expenses.json`, expense)
                 if(response.statusText !== 'OK') {
                     alert('sending expense to firebase failed!');
                 } else {
@@ -78,7 +79,7 @@ const ExpenseForm = () => {
     }
 
     const deleteExpenseHandler = (expenseId) => {
-        axios.delete(`https://expensetrackerstorage-default-rtdb.firebaseio.com/expenses/${expenseId}.json`)
+        axios.delete(`https://expensetrackerstorage-default-rtdb.firebaseio.com/${email}expenses/${expenseId}.json`)
         .then(response => {
             if(response.statusText === 'OK') {
                 fetchExpenses();

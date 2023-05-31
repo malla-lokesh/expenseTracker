@@ -52,6 +52,8 @@ const AuthenticationForm = () => {
             }).then(data => {
                 dispatch(authActions.login(true));
                 dispatch(authActions.setIdToken(data.idToken));
+                const sanitizedEmail = data.email.replace(/[.@]/g, '');
+                dispatch(authActions.setEmail(sanitizedEmail));
                 setRedirectToHomepage(true);
             }).catch(error => console.log(error));
         } else {
