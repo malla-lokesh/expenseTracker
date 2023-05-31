@@ -1,15 +1,24 @@
-import React, { useContext } from "react";
-import AuthenticationForm from "./Components/AuthenticationForm";
+import React, { useEffect } from "react";
+import AuthenticationForm from "./Components/Authentication/AuthenticationForm";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom/cjs/react-router-dom";
 import Homepage from "./Pages/Homepage";
-import AuthContext from "./Components/ContextStore/AuthContext";
 import UpdateProfilePage from "./Pages/UpdateProfilePage";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ExpenseForm from "./Expenses/ExpenseForm";
 import { ExpenseContextProvider } from "./Components/ExpenseStore/ExpenseContext";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "./Components/Store/AuthReducer";
 
 function App() {
-  const authContext = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(state => state.authentication.isLoggedIn);
+  const idToken = useSelector(state => state.authentication.idToken);
+
+  useEffect(() => {
+    if(!idToken) {
+      dispatch(authActions.logout());
+    }
+  }, [dispatch, idToken]);
 
   return (
     <React.Fragment>
@@ -17,19 +26,19 @@ function App() {
         <Router>
           <Switch>
             <Route path='/' exact>
-              <AuthenticationForm/>
+              {!isLoggedIn ? <AuthenticationForm/> : <Redirect to='/homepage'/>}
             </Route>
             <Route path='/homepage' exact>
-              {authContext.isLoggedIn ? <Homepage/> : <Redirect to='/'/>}
+              {isLoggedIn ? <Homepage/> : <Redirect to='/'/>}
             </Route>
             <Route path='/updateProfilePage'>
-              {authContext.isLoggedIn ? <UpdateProfilePage/> : <Redirect to='/'/>}
+              {isLoggedIn ? <UpdateProfilePage/> : <Redirect to='/'/>}
             </Route>
             <Route path='/forgotpassword'>
               <ForgotPassword/>
             </Route>
             <Route path='/expenseForm'>
-              {authContext.isLoggedIn ? <ExpenseForm/> : <Redirect to='/'/>}
+              {isLoggedIn ? <ExpenseForm/> : <Redirect to='/'/>}
             </Route>
           </Switch>
         </Router>

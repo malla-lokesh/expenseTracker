@@ -1,17 +1,19 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
-import AuthContext from "../Components/ContextStore/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "../Components/Store/AuthReducer";
 
 const Homepage = () => {
     const history = useHistory();
-    const authContext = useContext(AuthContext);
+    const dispatch = useDispatch();
+    const idToken = useSelector(state => state.authentication.idToken)
 
     const verfiyEmailHandler = () => {
         fetch(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyDbZODcPqKDtyrTyZl4UpkMuFUsMsfH9Aw`, {
             method: 'POST',
             body: JSON.stringify({
                 requestType: 'VERIFY_EMAIL',
-                idToken: authContext.token
+                idToken: idToken
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -25,13 +27,18 @@ const Homepage = () => {
             })
     }
 
+    const logoutHandler = () => {
+        dispatch(authActions.setIdToken(''))
+        dispatch(authActions.logout())
+    }
+
     return <React.Fragment>
         <div>
             <div>Welcome to Expense Tracker!!!</div>
             <div>Want to update your profile?: 
                 <button type='button' onClick={() => history.push('/updateProfilePage')}>Click here</button>
             </div>
-            <button onClick={authContext.logout}>Logout</button>
+            <button type='button' onClick={logoutHandler}>Logout</button>
         </div>
         <hr/>
         <div>

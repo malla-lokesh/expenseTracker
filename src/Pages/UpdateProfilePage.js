@@ -1,36 +1,59 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../Components/ContextStore/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "../Components/Store/AuthReducer";
+import { useHistory } from "react-router-dom/cjs/react-router-dom";
 
 const UpdateProfilePage = () => {
     const [displayName, setDisplayName] = useState('');
     const [profilePicture, setProfilePicture] = useState('');
     const [detailsUpdatedMsg, setDetailsUpdatedMsg] = useState(false);
     const authContext = useContext(AuthContext);
+    const idToken = useSelector(state => state.authentication.idToken);
+    const dispatch = useDispatch();
+    const history = useHistory();
 
-    fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDbZODcPqKDtyrTyZl4UpkMuFUsMsfH9Aw`, {
-        method: 'POST',
-            body: JSON.stringify({
-                idToken: authContext.token,
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-    }).then(res => {
-        if(res.ok) {
-            return res.json();
-        } else {
-            res.json().then(data => {
-                alert(data.error.message);
+    useEffect(() => {
+        if(!idToken) {
+            dispatch(authActions.logout());
+            history.push('/');
+        }
+    }, [dispatch, idToken, history]);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        if(idToken && isMounted) {
+            fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDbZODcPqKDtyrTyZl4UpkMuFUsMsfH9Aw`, {
+                method: 'POST',
+                    body: JSON.stringify({
+                        idToken: idToken,
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+            }).then(res => {
+                if(res.ok) {
+                    return res.json();
+                } else {
+                    res.json().then(data => {
+                        alert(data.error.message);
+                    })
+                }
+            }).then(data => {
+                data.users.map(user => {
+                    setDisplayName(user.displayName)
+                    setProfilePicture(user.photoUrl)
+                    setDetailsUpdatedMsg(true);
+                    return null;
+                })
             })
         }
-    }).then(data => {
-        data.users.map(user => {
-            setDisplayName(user.displayName)
-            setProfilePicture(user.photoUrl)
-            setDetailsUpdatedMsg(true);
-            return null;
-        })
-    })
+
+        return () => {
+            isMounted = false;
+        }
+    }, [idToken])
 
     const updateProfileSubmitHandler = (event) => {
         event.preventDefault();
@@ -68,6 +91,7 @@ const UpdateProfilePage = () => {
             <button type='submit'>Update</button>
         </form>
         <h4>{detailsUpdatedMsg ? 'Profile is completed!' : ''}</h4>
+        <h6>{detailsUpdatedMsg ? 'Change the details if you want and click on UPDATE button.' : ''}</h6>
     </React.Fragment>
 };
 

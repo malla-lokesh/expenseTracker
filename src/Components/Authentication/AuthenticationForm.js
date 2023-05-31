@@ -1,7 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import './AuthenticationForm.css';
-import AuthContext from "./ContextStore/AuthContext";
 import { Redirect, useHistory } from "react-router-dom/cjs/react-router-dom";
+import { useDispatch } from "react-redux";
+import { authActions } from "../Store/AuthReducer";
 
 const AuthenticationForm = () => {
     const [email, setEmail] = useState('');
@@ -9,8 +10,8 @@ const AuthenticationForm = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [changeToLoginForm, setChangeToLoginForm] = useState(false);
     const [redirectToHomepage, setRedirectToHomepage] = useState(false);
-    const authContext = useContext(AuthContext);
     const history = useHistory();
+    const dispatch = useDispatch();
 
     const changeFormHandler = () => {
         setChangeToLoginForm((prevState) => !prevState);
@@ -49,7 +50,8 @@ const AuthenticationForm = () => {
                     });
                 }
             }).then(data => {
-                authContext.setToken(data.idToken, data.email);
+                dispatch(authActions.login(true));
+                dispatch(authActions.setIdToken(data.idToken));
                 setRedirectToHomepage(true);
             }).catch(error => console.log(error));
         } else {

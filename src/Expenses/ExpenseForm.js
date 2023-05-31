@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 // import ExpenseContext from "../Components/ExpenseStore/ExpenseContext";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { expenseActions } from "../Components/Store/ExpenseReducer";
 
 const ExpenseForm = () => {
     const [amount, setAmount] = useState('');
@@ -11,6 +13,9 @@ const ExpenseForm = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [editExpenseId, setEditExpenseId] = useState('');
+    const dispatch = useDispatch();
+    const expensesFromCentralStore = useSelector(state => state.expense.expenses);
+    const totalSpentAmount = useSelector(state => state.expense.totalSpentAmount);
 
     useEffect(() => {
         fetchExpenses();
@@ -24,8 +29,9 @@ const ExpenseForm = () => {
                 setIsLoading(false);
                 return;
             }
-            const arrayObject = Object.entries(response.data);
-            setExpenses(arrayObject);
+            const array = Object.entries(response.data);
+            dispatch(expenseActions.addExpense(array));
+            setExpenses(array);
         } catch (error) {
             console.error('Error fetching expenses: ', error);
         }
@@ -106,10 +112,13 @@ const ExpenseForm = () => {
             <button type='submit'>{!editMode ? 'Add Expense' : 'Edit expense'}</button>
         </form>
         <hr/>
+        <div>
+            {totalSpentAmount > 10000 ? "On spending total of 10,000 rupees, you've unlocked premium features." : null}
+        </div>
         {isLoading && <p>Loading your expenses...</p>}
-        {expenses!=null && expenses.map(expenseItem => {
-            const expenseId = expenseItem[0];
-            const expense = expenseItem[1];
+        {expensesFromCentralStore!=null && expensesFromCentralStore.map(expenseItem => {
+            const expenseId = expenseItem[0]; // string
+            const expense = expenseItem[1]; // object { amount, description, category }
             return <div key={expenseId}>
                 <div>
                     {expense.amount} - spent for {expense.category}
