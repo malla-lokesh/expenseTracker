@@ -2,20 +2,21 @@ import React, { useEffect, useState } from "react";
 // import ExpenseContext from "../Components/ExpenseStore/ExpenseContext";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { expenseActions } from "../Components/Store/ExpenseReducer";
+import { expenseActions } from "../Store/ExpenseReducer";
+import { themeActions } from "../Store/ThemeReducer";
 
 const ExpenseForm = () => {
     const [amount, setAmount] = useState('');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('Choose a category');
     // const expenseContext = useContext(ExpenseContext);
-    const [expenses, setExpenses] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [editExpenseId, setEditExpenseId] = useState('');
     const dispatch = useDispatch();
     const expensesFromCentralStore = useSelector(state => state.expense.expenses);
-    const totalSpentAmount = useSelector(state => state.expense.totalSpentAmount);
+    const premium = useSelector(state => state.expense.activatePremium);
+    const premiumActivated = useSelector(state => state.theme.showThemeButton);
 
     useEffect(() => {
         fetchExpenses();
@@ -31,7 +32,6 @@ const ExpenseForm = () => {
             }
             const array = Object.entries(response.data);
             dispatch(expenseActions.addExpense(array));
-            setExpenses(array);
         } catch (error) {
             console.error('Error fetching expenses: ', error);
         }
@@ -98,6 +98,29 @@ const ExpenseForm = () => {
         setEditMode(true);
     }
 
+    const premiumHandler = () => {
+        dispatch(themeActions.showThemeButton())
+    }
+
+    const downloadCSV = () => {
+        const csvContent = [
+          ["Amount", "Description", "Category"],
+          ...expensesFromCentralStore.map((expenseItem) => {
+            const expense = expenseItem[1];
+            return [expense.amount, expense.description, expense.category];
+          }),
+        ]
+          .map((row) => row.join(","))
+          .join("\n");
+    
+        const csvData = new Blob([csvContent], { type: "text/csv" });
+        const csvURL = URL.createObjectURL(csvData);
+        const tempLink = document.createElement("a");
+        tempLink.href = csvURL;
+        tempLink.setAttribute("download", "expenses.csv");
+        tempLink.click();
+    };
+
     return <React.Fragment>
         <form onSubmit={expenseFormSubmitHandler}>
             <input type='number' value={amount} onChange={(e) => setAmount(e.target.value)} min={1} placeholder="enter amount you've spent" required/>
@@ -112,9 +135,8 @@ const ExpenseForm = () => {
             <button type='submit'>{!editMode ? 'Add Expense' : 'Edit expense'}</button>
         </form>
         <hr/>
-        <div>
-            {totalSpentAmount > 10000 ? "On spending total of 10,000 rupees, you've unlocked premium features." : null}
-        </div>
+        {premium && !premiumActivated && <button type='button' onClick={premiumHandler} >Activate Premium</button>}
+        {premiumActivated && <button type='button' onClick={downloadCSV}>Download your expenses</button>}
         {isLoading && <p>Loading your expenses...</p>}
         {expensesFromCentralStore!=null && expensesFromCentralStore.map(expenseItem => {
             const expenseId = expenseItem[0]; // string

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../Components/ContextStore/AuthContext";
 import { useDispatch, useSelector } from "react-redux";
-import { authActions } from "../Components/Store/AuthReducer";
+import { authActions } from "../Store/AuthReducer";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
 
 const UpdateProfilePage = () => {

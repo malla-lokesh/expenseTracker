@@ -5,9 +5,9 @@ import Homepage from "./Pages/Homepage";
 import UpdateProfilePage from "./Pages/UpdateProfilePage";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ExpenseForm from "./Expenses/ExpenseForm";
-import { ExpenseContextProvider } from "./Components/ExpenseStore/ExpenseContext";
 import { useDispatch, useSelector } from "react-redux";
-import { authActions } from "./Components/Store/AuthReducer";
+import { authActions } from "./Store/AuthReducer";
+import Header from "./Pages/Header";
 
 function App() {
   const dispatch = useDispatch();
@@ -22,27 +22,27 @@ function App() {
 
   return (
     <React.Fragment>
-      <ExpenseContextProvider>
-        <Router>
-          <Switch>
-            <Route path='/' exact>
-              {!isLoggedIn ? <AuthenticationForm/> : <Redirect to='/homepage'/>}
-            </Route>
-            <Route path='/homepage' exact>
-              {isLoggedIn ? <Homepage/> : <Redirect to='/'/>}
-            </Route>
-            <Route path='/updateProfilePage'>
-              {isLoggedIn ? <UpdateProfilePage/> : <Redirect to='/'/>}
-            </Route>
-            <Route path='/forgotpassword'>
-              <ForgotPassword/>
-            </Route>
-            <Route path='/expenseForm'>
-              {isLoggedIn ? <ExpenseForm/> : <Redirect to='/'/>}
-            </Route>
-          </Switch>
-        </Router>
-      </ExpenseContextProvider>
+      <Header/>
+      <hr/>
+      <Router>
+        <Switch>
+          <Route path='/' exact>
+            {!isLoggedIn ? <AuthenticationForm/> : <Redirect to='/homepage'/>}
+          </Route>
+          <Route path='/homepage' exact>
+            {isLoggedIn ? <Homepage/> : <Redirect to='/'/>}
+          </Route>
+          <Route path='/updateProfilePage'>
+            {isLoggedIn ? <UpdateProfilePage/> : <Redirect to='/'/>}
+          </Route>
+          <Route path='/forgotpassword'>
+            <ForgotPassword/>
+          </Route>
+          <Route path='/expenseForm'>
+            {isLoggedIn ? <ExpenseForm/> : <Redirect to='/'/>}
+          </Route>
+        </Switch>
+      </Router>
     </React.Fragment>
   );
 }

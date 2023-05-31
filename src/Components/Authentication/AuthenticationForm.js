@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import './AuthenticationForm.css';
 import { Redirect, useHistory } from "react-router-dom/cjs/react-router-dom";
 import { useDispatch } from "react-redux";
-import { authActions } from "../Store/AuthReducer";
+import { authActions } from "../../Store/AuthReducer";
 
 const AuthenticationForm = () => {
     const [email, setEmail] = useState('');

@@ -1,11 +1,9 @@
 import React from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { authActions } from "../Components/Store/AuthReducer";
+import { useSelector } from "react-redux";
 
 const Homepage = () => {
     const history = useHistory();
-    const dispatch = useDispatch();
     const idToken = useSelector(state => state.authentication.idToken)
 
     const verfiyEmailHandler = () => {
@@ -27,18 +25,11 @@ const Homepage = () => {
             })
     }
 
-    const logoutHandler = () => {
-        dispatch(authActions.setIdToken(''))
-        dispatch(authActions.logout())
-    }
-
     return <React.Fragment>
         <div>
-            <div>Welcome to Expense Tracker!!!</div>
             <div>Want to update your profile?: 
                 <button type='button' onClick={() => history.push('/updateProfilePage')}>Click here</button>
             </div>
-            <button type='button' onClick={logoutHandler}>Logout</button>
         </div>
         <hr/>
         <div>

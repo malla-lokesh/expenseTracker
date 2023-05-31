@@ -2,7 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialExpenseState = { 
     expenses: [],
-    totalSpentAmount: 0
+    totalSpentAmount: 0,
+    activatePremium: false,
+    showExpenses: false,
 }
 
 const expenseSlice = createSlice({
@@ -17,8 +19,15 @@ const expenseSlice = createSlice({
                 return null;
             })
             state.totalSpentAmount = totalAmount;
-            console.log(state.totalSpentAmount);
+            if(state.totalSpentAmount >= 10000) {
+                state.activatePremium = true;
+            } else{
+                state.activatePremium = false;
+            }
         },
+        showExpense(state) {
+            state.showExpenses = !state.showExpenses;
+        }
     }
 })
 
