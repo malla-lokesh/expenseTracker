@@ -3,6 +3,7 @@ import AuthContext from "../Components/ContextStore/AuthContext";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../Store/AuthReducer";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
+import './updateProfilePage.css';
 
 const UpdateProfilePage = () => {
     const [displayName, setDisplayName] = useState('');
@@ -69,13 +70,12 @@ const UpdateProfilePage = () => {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(res => {
+        }).then(async res => {
             if(res.ok) {
                 return res.json();
             } else {
-                return res.json().then(data => {
-                    alert(data.error.message);
-                })
+                const data = await res.json();
+                alert(data.error.message);
             }
         }).then((data) => {
             authContext.setDisplayName(data.displayName);
@@ -86,9 +86,13 @@ const UpdateProfilePage = () => {
     return <React.Fragment>
         <h2>Update Your Profile</h2>
         <form onSubmit={updateProfileSubmitHandler}>
+            <label>Display Name: </label>
             <input type='text' value={displayName} onChange={(e) => setDisplayName(e.target.value)} placeholder='Display Name'/>
+            <br/>
+            <label>Photo: </label>
             <input type='url' value={profilePicture} onChange={(e) => setProfilePicture(e.target.value)} placeholder='place the URL for photo'/>
-            <button type='submit'>Update</button>
+            <br/>
+            <button className='updateProfileButton' type='submit'>Update</button>
         </form>
         <h4>{detailsUpdatedMsg ? 'Profile is completed!' : ''}</h4>
         <h6>{detailsUpdatedMsg ? 'Change the details if you want and click on UPDATE button.' : ''}</h6>

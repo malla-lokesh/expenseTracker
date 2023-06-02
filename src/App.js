@@ -8,6 +8,7 @@ import ExpenseForm from "./Expenses/ExpenseForm";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "./Store/AuthReducer";
 import Header from "./Pages/Header";
+import './app.css';
 
 function App() {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ function App() {
   return (
     <React.Fragment>
       <Header/>
-      <hr/>
+      <hr className='hrInApp'/>
       <Router>
         <Switch>
           <Route path='/' exact>

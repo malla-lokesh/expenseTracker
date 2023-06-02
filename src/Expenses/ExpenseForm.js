@@ -4,6 +4,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { expenseActions } from "../Store/ExpenseReducer";
 import { themeActions } from "../Store/ThemeReducer";
+import './expenseForm.css';
 
 const ExpenseForm = () => {
     const [amount, setAmount] = useState('');
@@ -21,7 +22,7 @@ const ExpenseForm = () => {
 
     useEffect(() => {
         fetchExpenses();
-    }, []);
+    }, [dispatch]);
 
     const fetchExpenses = async () => {
         setIsLoading(true);
@@ -123,34 +124,47 @@ const ExpenseForm = () => {
     };
 
     return <React.Fragment>
-        <form onSubmit={expenseFormSubmitHandler}>
-            <input type='number' value={amount} onChange={(e) => setAmount(e.target.value)} min={1} placeholder="enter amount you've spent" required/>
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder='Write something about your expense...'/>
-            <select value={category} onChange={(e) => setCategory(e.target.value)}>
-                <option disabled>Choose a category</option>
-                <option value='food'>Food</option>
-                <option value='petrol'>Petrol</option>
-                <option value='credit card'>Credit Card</option>
-                <option value='courses'>Courses</option>
-            </select>
-            <button type='submit'>{!editMode ? 'Add Expense' : 'Edit expense'}</button>
-        </form>
-        <hr/>
-        {premium && !premiumActivated && <button type='button' onClick={premiumHandler} >Activate Premium</button>}
-        {premiumActivated && <button type='button' onClick={downloadCSV}>Download your expenses</button>}
-        {isLoading && <p>Loading your expenses...</p>}
-        {expensesFromCentralStore!=null && expensesFromCentralStore.map(expenseItem => {
-            const expenseId = expenseItem[0]; // string
-            const expense = expenseItem[1]; // object { amount, description, category }
-            return <div key={expenseId}>
-                <div>
-                    {expense.amount} - spent for {expense.category}
-                </div>
-                <div>{expense.description}</div>
-                <button type='button' onClick={() => {editExpenseHandler(expenseItem)}}>edit</button>
-                <button type='button' onClick={() => {deleteExpenseHandler(expenseId)}}>delete</button>
+        <div>
+            <form onSubmit={expenseFormSubmitHandler} className='expenseForm'>
+                <div className='headingText'>RECENTLY SPENT YOUR MONEY? Note here 👇</div>
+                <label className='amountLabel'>Amount</label>
+                <input className='amountInput' type='number' value={amount} onChange={(e) => setAmount(e.target.value)} min={1} placeholder="enter amount you've spent" required/>
+                <label className='descriptionLabel'>Description</label>
+                <textarea rows={4} cols={50} className='descriptionInput' value={description} onChange={(e) => setDescription(e.target.value)} placeholder='Write something about your expense...'/>
+                <select className='categoryInput' value={category} onChange={(e) => setCategory(e.target.value)}>
+                    <option disabled>Choose a category</option>
+                    <option value='food'>Food</option>
+                    <option value='petrol'>Petrol</option>
+                    <option value='credit card'>Credit Card</option>
+                    <option value='courses'>Courses</option>
+                </select>
+                <button className='addExpenseButton' type='submit'>{!editMode ? 'Add Expense' : 'Edit expense'}</button>
+            </form>
+            {premium && !premiumActivated && <button className='activatePremiumButton' type='button' onClick={premiumHandler} >Activate Premium 🌟</button>}
+            {premium && premiumActivated && <button className='downloadExpenseButton' type='button' onClick={downloadCSV}>Download your expenses 📊</button>}
+            {isLoading && <p>Loading your expenses...</p>}
+            <h2 className='expensesTitle'>My Expenses</h2>
+            <div className='expensesDiv'>
+                {expensesFromCentralStore!=null && expensesFromCentralStore.map(expenseItem => {
+                    const expenseId = expenseItem[0]; // string
+                    const expense = expenseItem[1]; // object { amount, description, category }
+                    return <div className='expenseDiv' key={expenseId}>
+                        <div className='expenseDetails'>
+                            <div className='expenseAmountAndCategory'>
+                                <span className='expenseAmount'>{expense.amount}</span> 
+                                - 
+                                <span className='expenseCategory'>{expense.category.toUpperCase()}</span>
+                            </div>
+                            <div>
+                                <button className='editExpenseButton' type='button' onClick={() => {editExpenseHandler(expenseItem)}}>edit</button>
+                                <button className='deleteExpenseButton' type='button' onClick={() => {deleteExpenseHandler(expenseId)}}>delete</button>
+                            </div>
+                        </div>
+                        <div className='expenseDescription'>{expense.description}</div>
+                    </div>
+                })}
             </div>
-        })}
+        </div>
     </React.Fragment>
 };
 

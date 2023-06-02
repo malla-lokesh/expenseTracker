@@ -1,6 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import { useSelector } from "react-redux";
+import './homepage.css';
 
 const Homepage = () => {
     const history = useHistory();
@@ -38,11 +39,14 @@ const Homepage = () => {
             </button>
              to verify your email
         </div>
-        <div>
-            <button type='button' onClick={() => history.push('/expenseForm')}>
-                Click here 
+        <div className='myExpensesDiv'>
+            <button 
+                type='button' 
+                onClick={() => history.push('/expenseForm')}
+                className='myExpensesButton'
+                >
+                My Expenses
             </button>
-            to explore your expenses
         </div>
     </React.Fragment>
 };

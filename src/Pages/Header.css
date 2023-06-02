@@ -1,0 +1,40 @@
+.headerAndLogoutDiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.logoutButton {
+    font-size: 18px;
+    padding: 6px 12px 6px 12px;
+    background-color: white;
+    color: #333333;
+    border: 1px solid #BDC3C7;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.logoutButton:active,
+.logoutButton:hover {
+    background-color: #333333;
+    color: white;
+}
+
+.changeThemeButton {
+    border: none;
+    cursor: pointer;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.changeThemeButton:hover {
+    background-color: black;
+    color: white;
+}
+
+.changeThemeButton:active {
+    background-color: white;
+    color: black;
+}

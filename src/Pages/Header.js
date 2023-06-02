@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../Store/AuthReducer";
 import { themeActions } from "../Store/ThemeReducer";
+import './Header.css';
 
 const Header = () => {
     const isLoggedIn = useSelector(state => state.authentication.isLoggedIn);
@@ -17,12 +18,14 @@ const Header = () => {
     }
 
     return <React.Fragment>
-        <h1 style={{
-            color: theme === 'dark' ? 'white' : 'black',
-            backgroundColor: theme === 'dark' ? 'black' : 'white'
-        }}>Welcome to Expense Tracker!!!</h1>
-        {isLoggedIn && <button onClick={logoutHandler}>Logout</button>}
-        {isLoggedIn && premiumActivated && showThemeButtton && <button onClick={() => {dispatch(themeActions.changeTheme())}}>Change Theme</button>}
+        <div className='headerAndLogoutDiv'>
+            <h1 style={{
+                color: theme === 'dark' ? 'white' : 'black',
+                backgroundColor: theme === 'dark' ? 'black' : 'white'
+            }}>Welcome to Expense Tracker!!!</h1>
+            {isLoggedIn && <button className='logoutButton' onClick={logoutHandler}>Logout</button>}
+        </div>
+        {isLoggedIn && premiumActivated && showThemeButtton && <button className='changeThemeButton' onClick={() => {dispatch(themeActions.changeTheme())}}>Change Theme</button>}
     </React.Fragment>
 }
 

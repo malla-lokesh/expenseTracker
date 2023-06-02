@@ -1,0 +1,11 @@
+.updateProfileButton {
+    border: none;
+    background-color: brown;
+    color: white;
+    padding: 6px 10px 6px 10px;
+    font-size: 17px;
+    margin-top: 10px;
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 6px;
+}

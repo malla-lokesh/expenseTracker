@@ -87,19 +87,19 @@ const AuthenticationForm = () => {
     }
 
     return <React.Fragment>
+        <button className='authenticationCheckingButton' type='button' onClick={changeFormHandler}>
+            {changeToLoginForm ? 'Need an account? Sign up' : 'Have an account? Login'}
+        </button>
         <form className='authenticationForm' onSubmit={authenticationFormSubmitHandler}>
             <h2 className='formHeading'>{changeToLoginForm ? 'Login' : 'SignUp'}</h2>
             <input className='emailInput' type='email' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='email' required/>
             <input className='passwordInput' type='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='password' required/>
             {!changeToLoginForm && <input className='confirmPasswordInput' type='password' value={confirmPassword} onChange={setConfirmPasswordHandler} placeholder='confirm password' required/>}
-            {changeToLoginForm && <button onClick={() => history.push('/forgotpassword')}>forgot password</button>}
+            {changeToLoginForm && <button className='forgotPasswordButton' onClick={() => history.push('/forgotpassword')}>forgot password</button>}
             <button type='submit' className='authenticationFormSubmitButton'>
                 {changeToLoginForm ? 'Login' : 'Sign up'}
             </button>
         </form>
-        <button className='authenticationCheckingButton' type='button' onClick={changeFormHandler}>
-            {changeToLoginForm ? 'Need an account? Sign up' : 'Have an account? Login'}
-        </button>
     </React.Fragment>
 };
 
