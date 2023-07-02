@@ -1,49 +1,39 @@
 import React, { useEffect } from "react";
 import AuthenticationForm from "./Components/Authentication/AuthenticationForm";
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom/cjs/react-router-dom";
+import { useNavigate, Route, Routes } from "react-router-dom";
 import Homepage from "./Pages/Homepage";
 import UpdateProfilePage from "./Pages/UpdateProfilePage";
 import ForgotPassword from "./Pages/ForgotPassword";
-import ExpenseForm from "./Expenses/ExpenseForm";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "./Store/AuthReducer";
 import Header from "./Pages/Header";
-import './app.css';
 
 function App() {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector(state => state.authentication.isLoggedIn);
-  const idToken = useSelector(state => state.authentication.idToken);
+  const isLoggedIn = useSelector((state) => state.authentication.isLoggedIn);
+  const idToken = useSelector((state) => state.authentication.idToken);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if(!idToken) {
+    if (!idToken) {
       dispatch(authActions.logout());
     }
   }, [dispatch, idToken]);
 
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/");
+    }
+  }, [isLoggedIn, navigate]);
+
   return (
     <React.Fragment>
-      <Header/>
-      <hr className='hrInApp'/>
-      <Router>
-        <Switch>
-          <Route path='/' exact>
-            {!isLoggedIn ? <AuthenticationForm/> : <Redirect to='/homepage'/>}
-          </Route>
-          <Route path='/homepage' exact>
-            {isLoggedIn ? <Homepage/> : <Redirect to='/'/>}
-          </Route>
-          <Route path='/updateProfilePage'>
-            {isLoggedIn ? <UpdateProfilePage/> : <Redirect to='/'/>}
-          </Route>
-          <Route path='/forgotpassword'>
-            <ForgotPassword/>
-          </Route>
-          <Route path='/expenseForm'>
-            {isLoggedIn ? <ExpenseForm/> : <Redirect to='/'/>}
-          </Route>
-        </Switch>
-      </Router>
+      {isLoggedIn && <Header />}
+      <Routes>
+        <Route path="/" element={!isLoggedIn ? <AuthenticationForm/> : <Homepage/>}/>
+        <Route path="/updateProfilePage" element={isLoggedIn ? <UpdateProfilePage /> : <Homepage />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
+      </Routes>
     </React.Fragment>
   );
 }

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../Components/ContextStore/AuthContext";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../Store/AuthReducer";
-import { useHistory } from "react-router-dom/cjs/react-router-dom";
+import { useNavigate } from "react-router-dom";
 import './updateProfilePage.css';
 
 const UpdateProfilePage = () => {
@@ -12,20 +12,20 @@ const UpdateProfilePage = () => {
     const authContext = useContext(AuthContext);
     const idToken = useSelector(state => state.authentication.idToken);
     const dispatch = useDispatch();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if(!idToken) {
             dispatch(authActions.logout());
-            history.push('/');
+            navigate('/');
         }
-    }, [dispatch, idToken, history]);
+    }, [dispatch, idToken, navigate]);
 
     useEffect(() => {
         let isMounted = true;
 
         if(idToken && isMounted) {
-            fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDbZODcPqKDtyrTyZl4UpkMuFUsMsfH9Aw`, {
+            fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyBWaj0fZXJolWpm6wbdt_Nd4SDxmFgeEFU`, {
                 method: 'POST',
                     body: JSON.stringify({
                         idToken: idToken,
@@ -59,7 +59,7 @@ const UpdateProfilePage = () => {
     const updateProfileSubmitHandler = (event) => {
         event.preventDefault();
 
-        fetch(`https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDbZODcPqKDtyrTyZl4UpkMuFUsMsfH9Aw`, {
+        fetch(`https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyBWaj0fZXJolWpm6wbdt_Nd4SDxmFgeEFU`, {
             method: 'POST',
             body: JSON.stringify({
                 idToken: authContext.token,

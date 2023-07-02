@@ -15,9 +15,11 @@ const authSlice = createSlice({
         },
         logout(state) {
             state.isLoggedIn = false;
+            state.email = '';
+            state.idToken = '';
         },
         setEmail(state, action) {
-            state.email = action.payload
+            state.email = action.payload;
             if(action.payload === '') {
                 localStorage.removeItem('email')
             } else {
@@ -25,7 +27,7 @@ const authSlice = createSlice({
             }
         },
         setIdToken(state, action) {
-            state.idToken = action.payload
+            state.idToken = action.payload;
             if(action.payload === '') {
                 localStorage.removeItem('token')
             } else {
